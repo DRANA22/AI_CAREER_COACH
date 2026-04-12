@@ -15,8 +15,12 @@ document.addEventListener("DOMContentLoaded", () => {
       const formData = new FormData(analyzeForm);
       try {
         const res = await fetch("/analyze", { method: "POST", body: formData });
-        const data = await res.json();
-        if (data.error) throw new Error(data.error);
+        const contentType = res.headers.get("Content-Type") || "";
+        const data = contentType.includes("application/json") ? await res.json() : null;
+        if (!res.ok) {
+          throw new Error(data?.error || `${res.status} ${res.statusText}`);
+        }
+        if (data?.error) throw new Error(data.error);
         renderAnalysis(data.analysis, data.gaps);
       } catch (err) {
         resultSection.innerHTML = `<div class="alert-error">Error: ${err.message}</div>`;
@@ -97,7 +101,12 @@ async function generateRoadmap() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ gaps: gapsText, target_role: role, duration })
     });
-    const data = await res.json();
+    const contentType = res.headers.get("Content-Type") || "";
+    const data = contentType.includes("application/json") ? await res.json() : null;
+    if (!res.ok) {
+      throw new Error(data?.error || `${res.status} ${res.statusText}`);
+    }
+    if (data?.error) throw new Error(data.error);
     renderRoadmap(data.roadmap);
   } catch (err) {
     roadmapSection.innerHTML = `<div class="alert-error">Error: ${err.message}</div>`;
@@ -150,7 +159,15 @@ function renderRoadmap(roadmap) {
         body: JSON.stringify({ roadmap: roadmap })
       });
 
-      if (!response.ok) throw new Error("Failed to generate PDF");
+      if (!response.ok) {
+        const text = await response.text();
+        let errorText = `Failed to generate PDF (${response.status})`;
+        try {
+          const parsed = JSON.parse(text);
+          errorText = parsed.error || errorText;
+        } catch (e) {}
+        throw new Error(errorText);
+      }
 
       // Handle the file download
       const blob = await response.blob();

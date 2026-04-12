@@ -1,9 +1,13 @@
 import os
-from flask import Flask, render_template, request, session, jsonify, redirect, url_for
+import io
+from flask import Flask, render_template, request, session, jsonify, redirect, url_for, send_file
 from dotenv import load_dotenv
 import google.generativeai as genai
 import pyrebase
 import json
+from reportlab.lib.pagesizes import letter
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 
 load_dotenv()
 
@@ -114,12 +118,53 @@ def roadmap():
     if "user" not in session:
         return jsonify({"error": "Unauthorized"}), 401
     try:
-        data = request.get_json()
+        data = request.get_json(silent=True)
+        if not data:
+            return jsonify({"error": "Invalid JSON payload"}), 400
         gaps = data.get("gaps", "")
         target_role = data.get("target_role", "Software Engineer")
         duration = data.get("duration", "6")
         result = generate_roadmap(gaps, target_role, duration, model)
         return jsonify({"roadmap": result})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/download_roadmap", methods=["POST"])
+def download_roadmap():
+    if "user" not in session:
+        return jsonify({"error": "Unauthorized"}), 401
+    data = request.get_json(silent=True)
+    if not data or "roadmap" not in data:
+        return jsonify({"error": "No roadmap data provided"}), 400
+
+    roadmap = data["roadmap"]
+    try:
+        buffer = io.BytesIO()
+        doc = SimpleDocTemplate(buffer, pagesize=letter)
+        styles = getSampleStyleSheet()
+        elements = [Paragraph("Career Roadmap", styles["Title"]), Spacer(1, 12)]
+
+        for item in roadmap:
+            month = item.get("month", "")
+            phase = item.get("phase", "")
+            focus = item.get("focus", "")
+            milestone = item.get("milestone", "")
+            elements.append(Paragraph(f"Month {month}: {phase}", styles["Heading2"]))
+            if focus:
+                elements.append(Paragraph(f"Focus: {focus}", styles["BodyText"]))
+            if milestone:
+                elements.append(Paragraph(f"Milestone: {milestone}", styles["BodyText"]))
+            goals = item.get("goals", [])
+            if goals:
+                elements.append(Paragraph("Goals:", styles["BodyText"]))
+                for goal in goals:
+                    elements.append(Paragraph(f"• {goal}", styles["Bullet"]))
+            elements.append(Spacer(1, 12))
+
+        doc.build(elements)
+        buffer.seek(0)
+        return send_file(buffer, mimetype="application/pdf", as_attachment=True, download_name="My_Career_Roadmap.pdf")
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
