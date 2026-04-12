@@ -18,7 +18,7 @@ app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024
 # ── Gemini AI Setup ──────────────────────────────────────────────
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 # Using 1.5-flash as it is more stable and uses less memory than preview models
-model = genai.GenerativeModel("gemini-1.5-flash")
+model = genai.GenerativeModel("gemini-3-flash-preview")
 
 # ── Firebase Setup ───────────────────────────────────────────────
 firebase_config = {
