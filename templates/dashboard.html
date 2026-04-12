@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard — CareerAI</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/" class="logo" style="text-decoration:none;">🤖 CareerAI</a>
+    <div class="nav-links">
+      <span style="color:var(--text-secondary);">Hello, {{ name }} 👋</span>
+      <a href="/logout" style="margin-left:1.5rem;">Logout</a>
+    </div>
+  </nav>
+
+  <div class="container section">
+
+    <!-- ── Dashboard Header ── -->
+    <div class="glass-card" style="margin-bottom:2rem; text-align:center;">
+      <h1 style="font-size:2.5rem; font-weight:800; margin-bottom:0.5rem;">
+        🤖 AI Career Dashboard
+      </h1>
+      <p style="color:var(--text-secondary); font-size:1.1rem;">
+        Analyse your resume, detect skill gaps, and generate personalized roadmaps with AI power.
+      </p>
+    </div>
+
+    <!-- ── Upload & Analyse ── -->
+    <div class="glass-card" style="margin-bottom:2rem;">
+      <h2 style="margin-bottom:1.5rem;">📄 Analyse Your Resume</h2>
+      <form id="analyze-form" enctype="multipart/form-data">
+        <div class="grid-2">
+          <div class="form-group">
+            <label>Upload Resume (PDF)</label>
+            <input type="file" name="resume" accept=".pdf" required/>
+          </div>
+          <div class="form-group">
+            <label>Target Role</label>
+            <input type="text" id="target-role" name="target_role"
+              placeholder="e.g. Full Stack Developer" value="Software Engineer"/>
+          </div>
+        </div>
+        <div class="form-group" style="position:relative;">
+          <label>Job Description</label>
+          <textarea id="job-description" name="job_description"
+            placeholder="Paste the job description here..."></textarea>
+          <div style="margin-top:0.5rem;">
+            <button type="button" class="btn-voice" id="voice-btn">🎤 Voice Input</button>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:1rem; flex-wrap:wrap;">
+          <button type="submit" class="btn-primary">🔍 Analyse Resume</button>
+          <div style="display:flex; align-items:center; gap:0.5rem;">
+            <label style="color:var(--text-secondary); font-size:0.9rem;">Roadmap Duration:</label>
+            <select id="duration-select" style="background:rgba(255,255,255,0.05);
+              border:1px solid var(--glass-border); color:var(--text-primary);
+              padding:0.4rem 0.8rem; border-radius:8px;">
+              <option value="3">3 Months (Intensive)</option>
+              <option value="6" selected>6 Months (Standard)</option>
+            </select>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- ── Spinner ── -->
+    <div class="spinner" id="spinner"></div>
+
+    <!-- ── Results ── -->
+    <div id="result-section"></div>
+
+    <!-- ── Roadmap ── -->
+    <div id="roadmap-section" style="margin-top:1.5rem;"></div>
+
+  </div>
+
+  <script src="{{ url_for('static', filename='js/voice_input.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
