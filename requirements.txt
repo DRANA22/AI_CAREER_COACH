@@ -1,8 +1,8 @@
-flask
+﻿flask
 python-dotenv
 google-generativeai
-pyrebase4
 PyPDF2
 pdfplumber
-reportlab
+pyrebase4
 gunicorn
+fpdf
