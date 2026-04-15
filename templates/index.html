@@ -1,66 +1,200 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AI Career Coach</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CareerAI — Next Gen OS</title>
+  <meta name="description" content="AI-powered career suite." />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800;900&display=swap" rel="stylesheet" />
 </head>
-<body>
-  <nav class="navbar">
-    <div class="logo">🤖 CareerAI</div>
-    <div class="nav-links">
-      <a href="/login">Login</a>
-      <a href="/register" class="btn-primary" style="padding:0.5rem 1rem;">Get Started</a>
-    </div>
-  </nav>
 
-  <div class="container">
-    <section class="section" style="text-align:center; padding-top:5rem;">
-      <h1 style="font-size:3.5rem; font-weight:800; line-height:1.1; margin-bottom:1.5rem;">
-        Your AI-Powered<br/>
-        <span style="background: linear-gradient(135deg, #38bdf8, #a78bfa);
-          background-clip: text; -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-          text-shadow: 0 0 20px rgba(56, 189, 248, 0.5), 0 0 40px rgba(167, 139, 250, 0.3);">
-          Career Coach
-        </span>
-      </h1>
-      <p style="font-size:1.2rem; color:var(--text-secondary); max-width:600px;
-        margin:0 auto 2.5rem;">
-        Analyse your resume, identify skill gaps, and get a personalised
-        learning roadmap — all powered by Gemini AI.
-      </p>
-      <a href="/register" class="btn-primary" style="font-size:1.1rem; padding:1rem 2.5rem;">
-        Start for Free →
+<body style="background:var(--bg-primary);">
+  <!-- Magic Interactive Background -->
+  <canvas id="interactive-canvas"></canvas>
+
+  <div class="container animate-slide-up">
+    <nav class="navbar" style="background:transparent; padding:2.5rem 0; border:none; position:relative;">
+      <a href="/" class="logo">
+        <span style="opacity:0.8; font-weight:300; font-size:1.8rem; color:var(--accent-cyan);">∅</span> CareerAI
       </a>
-    </section>
+      <div class="nav-links">
+        <a href="#features" style="font-weight:600; letter-spacing:0.1em; text-transform:uppercase; font-size:0.8rem; color:#fff;">Intelligence</a>
+        <a href="#solution" style="font-weight:600; letter-spacing:0.1em; text-transform:uppercase; font-size:0.8rem; color:#fff;">Architecture</a>
+        <a href="/login" style="font-weight:600; letter-spacing:0.1em; text-transform:uppercase; font-size:0.8rem; color:#fff;">Login</a>
+        <a href="/register" class="btn-primary" style="padding:0.8rem 2.5rem; font-size:0.9rem;">Initialize System</a>
+      </div>
+    </nav>
 
-    <section class="section">
-      <div class="grid-3">
-        <div class="glass-card" style="text-align:center;">
-          <div style="font-size:2.5rem; margin-bottom:1rem;">📄</div>
-          <h3 style="margin-bottom:0.75rem;">Resume Analyser</h3>
-          <p style="color:var(--text-secondary); font-size:0.9rem;">
-            ATS simulation with match percentage, missing keywords, and expert suggestions.
-          </p>
+    <!-- ── Ultra Modern Animated Hero ── -->
+    <section class="hero" style="border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 6rem; flex-direction:column; justify-content:center;">
+      <div class="hero-content">
+        <div class="feature-pill animate-slide-up delay-1">
+          <span style="width:8px; height:8px; background:var(--accent-cyan); border-radius:50%; box-shadow:0 0 15px var(--accent-cyan); display:inline-block;"></span> 
+          System Engine Active
         </div>
-        <div class="glass-card" style="text-align:center;">
-          <div style="font-size:2.5rem; margin-bottom:1rem;">🎯</div>
-          <h3 style="margin-bottom:0.75rem;">Skill Gap Detector</h3>
-          <p style="color:var(--text-secondary); font-size:0.9rem;">
-            Pinpoints critical technical gaps, soft skills, and certifications you're missing.
-          </p>
-        </div>
-        <div class="glass-card" style="text-align:center;">
-          <div style="font-size:2.5rem; margin-bottom:1rem;">🗺️</div>
-          <h3 style="margin-bottom:0.75rem;">Roadmap Generator</h3>
-          <p style="color:var(--text-secondary); font-size:0.9rem;">
-            Month-by-month learning plan with milestones, resources, and career goals.
-          </p>
+        <h1 class="animate-slide-up delay-2">
+          Harness the power of <br />
+          <span class="gradient-text">Neural Intelligence.</span>
+        </h1>
+        <p class="animate-slide-up delay-3">
+          CareerAI is the bleeding-edge suite providing deep generative mock interviews, ATS resume decryption, and highly predictive models to secure your success.
+        </p>
+        <div style="display:flex; gap:1.5rem; align-items:center; justify-content:center;" class="animate-slide-up delay-4">
+          <a href="/register" class="btn-primary" style="font-size:1.05rem; padding:1.2rem 3rem;">
+            Run Web Interface
+          </a>
+          <a href="#features" class="btn-secondary" style="font-size:1.05rem; padding:1.2rem 3rem; background:transparent;">
+            View Documentation
+          </a>
         </div>
       </div>
     </section>
+
+    <!-- ── Features Array ── -->
+    <section id="features" style="padding: 10rem 0;">
+      <div style="text-align:center; margin-bottom: 6rem;">
+        <h2 style="font-size:3.5rem; font-weight:800; letter-spacing:-0.03em;">Pure <span class="gradient-text">predictive engine.</span></h2>
+        <p style="color:var(--text-secondary); margin-top:1.5rem; font-size:1.1rem; max-width:600px; margin-left:auto; margin-right:auto;">Everything you need to secure your dream role, distilled into pure data.</p>
+      </div>
+
+      <div class="grid-3">
+        <div class="glass-card animate-slide-up delay-1" style="padding:3rem;">
+          <div style="font-size:1.5rem; margin-bottom:2rem; width:50px; height:50px; border:1px solid rgba(0,240,255,0.3); border-radius:12px; display:flex; align-items:center; justify-content:center; color:#00f0ff; background:rgba(0,240,255,0.05); box-shadow:var(--shadow-neon);">01</div>
+          <h3 style="margin-bottom:1rem; font-weight:800; font-size:1.5rem;">Sentient Career OS</h3>
+          <p style="color:var(--text-secondary); font-size:0.95rem; line-height:1.7;">Context-aware, deeply personalized career advice integrating your live data and algorithmic progression metrics.</p>
+        </div>
+        <div class="glass-card animate-slide-up delay-2" style="padding:3rem;">
+          <div style="font-size:1.5rem; margin-bottom:2rem; width:50px; height:50px; border:1px solid rgba(142,45,226,0.3); border-radius:12px; display:flex; align-items:center; justify-content:center; color:#8e2de2; background:rgba(142,45,226,0.05); box-shadow:0 0 30px rgba(142,45,226,0.2);">02</div>
+          <h3 style="margin-bottom:1rem; font-weight:800; font-size:1.5rem;">Neural Interviews</h3>
+          <p style="color:var(--text-secondary); font-size:0.95rem; line-height:1.7;">Adaptive AI interviews with rigorous grading. Evaluates technical, behavioral, and system design answers flawlessly.</p>
+        </div>
+        <div class="glass-card animate-slide-up delay-3" style="padding:3rem;">
+          <div style="font-size:1.5rem; margin-bottom:2rem; width:50px; height:50px; border:1px solid rgba(255,0,127,0.3); border-radius:12px; display:flex; align-items:center; justify-content:center; color:#ff007f; background:rgba(255,0,127,0.05); box-shadow:0 0 30px rgba(255,0,127,0.2);">03</div>
+          <h3 style="margin-bottom:1rem; font-weight:800; font-size:1.5rem;">Predictive Targeting</h3>
+          <p style="color:var(--text-secondary); font-size:0.95rem; line-height:1.7;">Analyzes thousands of ATS permutations to detect skill gaps instantly and project placement probabilities.</p>
+        </div>
+      </div>
+    </section>
+
+    <section style="padding: 6rem 0 12rem 0; text-align:center;">
+      <h2 style="font-size:4.5rem; font-weight:800; margin-bottom:3rem; letter-spacing:-0.04em;">Ready to connect?</h2>
+      <a href="/register" class="btn-primary" style="padding:1.4rem 4rem; font-size:1.2rem;">
+        Initialize Profile
+      </a>
+    </section>
   </div>
+
+  <script>
+    // Massive Interactive Cursor Background logic
+    // Using simple particle connective nodes and a glowing aura gradient behind the cursor.
+    const canvas = document.getElementById('interactive-canvas');
+    const ctx = canvas.getContext('2d');
+    
+    let width, height;
+    let particles = [];
+    let mouse = { x: null, y: null };
+    
+    // Core parameters for visual density
+    const particleCount = 100;
+    const connectionRadius = 150;
+    
+    function init() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+      
+      particles = [];
+      for (let i = 0; i < particleCount; i++) {
+        particles.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          vx: (Math.random() - 0.5) * 1.5,
+          vy: (Math.random() - 0.5) * 1.5,
+          radius: Math.random() * 2 + 1,
+          color: Math.random() > 0.5 ? 'rgba(0, 240, 255, ' : 'rgba(255, 0, 127, '
+        });
+      }
+    }
+    
+    window.addEventListener('resize', init);
+    window.addEventListener('mousemove', (e) => {
+      mouse.x = e.x;
+      mouse.y = e.y;
+    });
+    window.addEventListener('mouseleave', () => {
+      mouse.x = null;
+      mouse.y = null;
+    });
+    
+    function drawBaseGradient() {
+      ctx.fillStyle = '#030305';
+      ctx.fillRect(0, 0, width, height);
+
+      // Draw mouse moving glowing aura
+      if (mouse.x !== null) {
+        let grad = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 800);
+        grad.addColorStop(0, 'rgba(142, 45, 226, 0.15)');
+        grad.addColorStop(0.5, 'rgba(0, 240, 255, 0.05)');
+        grad.addColorStop(1, 'rgba(0,0,0,0)');
+        
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, width, height);
+      }
+    }
+    
+    function animate() {
+      drawBaseGradient();
+      
+      for (let i = 0; i < particles.length; i++) {
+        let p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        
+        if (p.x < 0 || p.x > width) p.vx *= -1;
+        if (p.y < 0 || p.y > height) p.vy *= -1;
+        
+        // Push particles from mouse slightly
+        if (mouse.x) {
+          let dx = mouse.x - p.x;
+          let dy = mouse.y - p.y;
+          let dist = Math.sqrt(dx*dx + dy*dy);
+          if (dist < 200) {
+            p.x -= dx * 0.01;
+            p.y -= dy * 0.01;
+          }
+        }
+        
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = p.color + '0.8)';
+        ctx.fill();
+        
+        // Connections
+        for (let j = i + 1; j < particles.length; j++) {
+          let p2 = particles[j];
+          let dx = p.x - p2.x;
+          let dy = p.y - p2.y;
+          let distance = Math.sqrt(dx*dx + dy*dy);
+          
+          if (distance < connectionRadius) {
+            let opacity = 1 - (distance / connectionRadius);
+            ctx.beginPath();
+            ctx.strokeStyle = `rgba(255, 255, 255, ${opacity * 0.15})`;
+            ctx.lineWidth = 1;
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.stroke();
+          }
+        }
+      }
+      
+      requestAnimationFrame(animate);
+    }
+    
+    init();
+    animate();
+  </script>
 </body>
+
 </html>

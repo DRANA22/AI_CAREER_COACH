@@ -16,7 +16,7 @@ app.secret_key = os.getenv("FLASK_SECRET_KEY", "career-os-hackathon-secret")
 
 # 🔥 AI Setup - Gemini
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-model = genai.GenerativeModel("gemini-3-flash-preview")
+model = genai.GenerativeModel("gemini-2.0-flash")
 
 # 🔥 Firebase Setup
 firebase_config = {

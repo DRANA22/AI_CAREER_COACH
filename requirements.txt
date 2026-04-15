@@ -1,8 +1,10 @@
-﻿flask
+flask==2.3.3
 python-dotenv
 google-generativeai
 PyPDF2
 pdfplumber
 pyrebase4
 gunicorn
-fpdf
+python-pptx
+Werkzeug
+fpdf2
