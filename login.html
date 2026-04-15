@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login — CareerAI</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+  <!-- Continuous Shifting Color Background -->
+  <div class="animated-bg"></div>
+
+  <canvas id="particles-canvas"></canvas>
+
+  <nav class="navbar">
+    <a href="/" class="logo" style="text-decoration:none;">⚡ CareerAI</a>
+    <div class="nav-links">
+      <a href="/register">Register</a>
+    </div>
+  </nav>
+
+  <div class="container" style="display:flex; justify-content:center; padding-top:4rem; padding-bottom:4rem;">
+    <div class="glass-card" style="width:100%; max-width:440px;">
+      <div style="text-align:center; margin-bottom:2rem;">
+        <div style="font-size:2.5rem; margin-bottom:0.5rem;">👋</div>
+        <h2 style="font-size:1.6rem; font-weight:800; margin-bottom:0.3rem;">Welcome Back</h2>
+        <p style="color:var(--text-secondary); font-size:0.9rem;">Continue your career journey</p>
+      </div>
+
+      {% if error %}
+      <div class="alert-error">{{ error }}</div>
+      {% endif %}
+
+      <form method="POST" action="/login">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="you@email.com" required />
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" placeholder="••••••••" required />
+        </div>
+        <button type="submit" class="btn-primary" style="width:100%; justify-content:center; margin-top:0.5rem; padding:0.85rem;">
+          Login →
+        </button>
+      </form>
+
+      <p style="text-align:center; margin-top:1.5rem; color:var(--text-secondary); font-size:0.88rem;">
+        New to CareerAI? <a href="/register" style="color:var(--accent-cyan); font-weight:600;">Create account</a>
+      </p>
+    </div>
+  </div>
+
+  <script>
+    // Particle animation
+    (function () {
+      const canvas = document.getElementById('particles-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let particles = [];
+      function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+      resize(); window.addEventListener('resize', resize);
+      for (let i = 0; i < 30; i++) {
+        particles.push({
+          x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+          vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.3,
+          size: Math.random() * 1.5 + 0.5, opacity: Math.random() * 0.3 + 0.1
+        });
+      }
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => {
+          ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(0, 240, 255, ${p.opacity})`; ctx.fill();
+          p.x += p.vx; p.y += p.vy;
+          if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+          if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+        });
+        requestAnimationFrame(draw);
+      }
+      draw();
+    })();
+  </script>
+</body>
+
+</html>
