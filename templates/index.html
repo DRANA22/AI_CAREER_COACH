@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CareerAI — Next Gen OS</title>
   <meta name="description" content="AI-powered career suite." />
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  <link rel="stylesheet" href="/static/css/style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800;900&display=swap" rel="stylesheet" />
 </head>
 
@@ -88,7 +88,6 @@
 
   <script>
     // Massive Interactive Cursor Background logic
-    // Using simple particle connective nodes and a glowing aura gradient behind the cursor.
     const canvas = document.getElementById('interactive-canvas');
     const ctx = canvas.getContext('2d');
     
@@ -96,7 +95,6 @@
     let particles = [];
     let mouse = { x: null, y: null };
     
-    // Core parameters for visual density
     const particleCount = 100;
     const connectionRadius = 150;
     
@@ -131,7 +129,6 @@
       ctx.fillStyle = '#030305';
       ctx.fillRect(0, 0, width, height);
 
-      // Draw mouse moving glowing aura
       if (mouse.x !== null) {
         let grad = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 800);
         grad.addColorStop(0, 'rgba(142, 45, 226, 0.15)');
@@ -154,7 +151,6 @@
         if (p.x < 0 || p.x > width) p.vx *= -1;
         if (p.y < 0 || p.y > height) p.vy *= -1;
         
-        // Push particles from mouse slightly
         if (mouse.x) {
           let dx = mouse.x - p.x;
           let dy = mouse.y - p.y;
@@ -170,7 +166,6 @@
         ctx.fillStyle = p.color + '0.8)';
         ctx.fill();
         
-        // Connections
         for (let j = i + 1; j < particles.length; j++) {
           let p2 = particles[j];
           let dx = p.x - p2.x;

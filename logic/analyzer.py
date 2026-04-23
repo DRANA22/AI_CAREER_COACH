@@ -1,13 +1,36 @@
+"""
+AI Resume Analyzer, Skill Gap Detector, Roadmap Generator, Placement Predictor
+Uses the centralized generate_ai() helper for retry + fallback.
+"""
+
 import json
 import re
 
 
-def analyze_resume(resume_text, job_description, target_role, model):
+def clean_json(raw):
+    """Cleans raw AI response text by stripping markdown code fences."""
+    raw = re.sub(r"```json", "", raw, flags=re.IGNORECASE)
+    raw = raw.replace("```", "").strip()
+    return raw
+
+
+def safe_parse_json(raw, fallback):
+    """Safely parses JSON from AI output, returns fallback on failure."""
+    try:
+        return json.loads(clean_json(raw))
+    except (json.JSONDecodeError, Exception):
+        return fallback
+
+
+def analyze_resume(resume_text, job_description, target_role, generate_fn):
     """
     ATS-level resume analysis — returns detailed scoring breakdown.
     """
     if not job_description.strip() and target_role.strip():
-        job_description = f"Hiring for a {target_role} role. The ideal candidate should have the skills, experience, and formatting to match this position."
+        job_description = (
+            f"Hiring for a {target_role} role. The ideal candidate should have "
+            f"the skills, experience, and formatting to match this position."
+        )
 
     prompt = f"""
 Act as an expert ATS (Applicant Tracking System) and senior technical recruiter.
@@ -40,39 +63,40 @@ Respond ONLY with a valid JSON object using exactly these keys:
 
 No markdown, no explanation, just the JSON object.
 """
-    response = model.generate_content(prompt)
+
+    response = generate_fn(prompt)
     raw = response.text.strip()
-    raw = re.sub(r"```json|```", "", raw).strip()
-    try:
-        result = json.loads(raw)
-        # Ensure ats_score exists
-        if "ats_score" not in result:
-            result["ats_score"] = result.get("match_percentage", 0)
-        return result
-    except json.JSONDecodeError:
-        return {
-            "ats_score": 0,
-            "match_percentage": 0,
-            "missing_keywords": [],
-            "matched_keywords": [],
-            "improvement_suggestions": ["Could not parse AI response. Try again."],
-            "profile_summary": raw[:500],
-            "section_scores": {
-                "contact_info": 0, "experience": 0,
-                "skills": 0, "education": 0, "formatting": 0
-            },
-            "strengths": [],
-            "red_flags": []
-        }
+    result = safe_parse_json(raw, {
+        "ats_score": 0,
+        "match_percentage": 0,
+        "missing_keywords": [],
+        "matched_keywords": [],
+        "improvement_suggestions": ["Could not parse AI response. Try again."],
+        "profile_summary": raw[:500],
+        "section_scores": {
+            "contact_info": 0, "experience": 0,
+            "skills": 0, "education": 0, "formatting": 0,
+        },
+        "strengths": [],
+        "red_flags": [],
+    })
+
+    if not result.get("ats_score"):
+        result["ats_score"] = result.get("match_percentage", 0)
+
+    return result
 
 
-def detect_skill_gaps(resume_text, job_description, target_role, model):
+def detect_skill_gaps(resume_text, job_description, target_role, generate_fn):
     """
     Identifies missing technical skills, soft skills, certifications,
     with learning resource recommendations.
     """
     if not job_description.strip() and target_role.strip():
-        job_description = f"Hiring for a {target_role} role. Focus on the skills and experience expected for this position."
+        job_description = (
+            f"Hiring for a {target_role} role. Focus on the skills and "
+            f"experience expected for this position."
+        )
 
     prompt = f"""
 You are a senior career coach analysing a candidate's skill gaps.
@@ -99,23 +123,20 @@ Respond ONLY with a valid JSON object:
 
 No markdown. JSON only.
 """
-    response = model.generate_content(prompt)
+
+    response = generate_fn(prompt)
     raw = response.text.strip()
-    raw = re.sub(r"```json|```", "", raw).strip()
-    try:
-        return json.loads(raw)
-    except json.JSONDecodeError:
-        return {
-            "critical_technical_gaps": [],
-            "soft_skill_gaps": [],
-            "missing_certifications": [],
-            "emerging_skills": [],
-            "priority_action": "Review AI response manually.",
-            "readiness_score": 50
-        }
+    return safe_parse_json(raw, {
+        "critical_technical_gaps": [],
+        "soft_skill_gaps": [],
+        "missing_certifications": [],
+        "emerging_skills": [],
+        "priority_action": "Review AI response manually.",
+        "readiness_score": 50,
+    })
 
 
-def generate_roadmap(gaps, target_role, duration_months, model):
+def generate_roadmap(gaps, target_role, duration_months, generate_fn):
     """
     Creates a month-by-month learning roadmap based on skill gaps.
     """
@@ -141,27 +162,30 @@ Create a structured {duration_months}-month roadmap. Respond ONLY with a valid J
 
 Make it practical, specific, and progressively challenging. JSON only.
 """
-    response = model.generate_content(prompt)
+
+    response = generate_fn(prompt)
     raw = response.text.strip()
-    raw = re.sub(r"```json|```", "", raw).strip()
-    try:
-        return json.loads(raw)
-    except json.JSONDecodeError:
-        return [{"month": 1, "phase": "Start", "focus": "Review AI response",
-                 "goals": [], "resources": [], "milestone": "N/A", "xp_reward": 50}]
+    return safe_parse_json(raw, [
+        {
+            "month": 1, "phase": "Start", "focus": "Review AI response",
+            "goals": [], "resources": [], "milestone": "N/A", "xp_reward": 50,
+        },
+    ])
 
 
-def predict_placement(profile, model):
+def predict_placement(profile, generate_fn):
     """
     Multi-factor placement prediction from user profile data.
     Returns detailed breakdown with actionable insights.
     """
+    profile_json = json.dumps(profile, indent=2, default=str)
+
     prompt = f"""
 You are an expert placement prediction AI. Analyze this user's complete career profile
 and predict their placement chances with detailed reasoning.
 
 User Profile:
-{json.dumps(profile, indent=2)}
+{profile_json}
 
 Respond ONLY with a valid JSON object:
 {{
@@ -184,24 +208,21 @@ Respond ONLY with a valid JSON object:
 
 Be realistic and data-driven. JSON only.
 """
-    response = model.generate_content(prompt)
+
+    response = generate_fn(prompt)
     raw = response.text.strip()
-    raw = re.sub(r"```json|```", "", raw).strip()
-    try:
-        return json.loads(raw)
-    except json.JSONDecodeError:
-        return {
-            "placement_chance": 50,
-            "timeframe": "6 months",
-            "confidence_score": 5.0,
-            "next_action": "Improve resume and interview skills.",
-            "factors": {
-                "technical_skills": 50, "experience": 50,
-                "resume_quality": 50, "interview_readiness": 50,
-                "market_demand": 60
-            },
-            "top_strengths": [],
-            "critical_improvements": ["Build more projects", "Practice interviews"],
-            "recommended_companies": [],
-            "salary_range": "Varies by location"
-        }
+    return safe_parse_json(raw, {
+        "placement_chance": 50,
+        "timeframe": "6 months",
+        "confidence_score": 5.0,
+        "next_action": "Improve resume and interview skills.",
+        "factors": {
+            "technical_skills": 50, "experience": 50,
+            "resume_quality": 50, "interview_readiness": 50,
+            "market_demand": 60,
+        },
+        "top_strengths": [],
+        "critical_improvements": ["Build more projects", "Practice interviews"],
+        "recommended_companies": [],
+        "salary_range": "Varies by location",
+    })

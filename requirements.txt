@@ -1,10 +1,7 @@
-flask==2.3.3
-python-dotenv
-google-generativeai
-PyPDF2
-pdfplumber
+flask
+google-genai
 pyrebase4
+PyPDF2
+reportlab
+python-dotenv
 gunicorn
-python-pptx
-Werkzeug
-fpdf2

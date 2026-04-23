@@ -1,31 +1,37 @@
-import PyPDF2 as pdf
-import pdfplumber
+"""
+PDF Resume Text Extraction
+Extracts text from uploaded PDF resume files.
+"""
 
-def extract_resume_text(uploaded_file):
+import PyPDF2
+import io
+
+
+def extract_resume_text(file_storage):
     """
     Extracts text from an uploaded PDF resume.
-    Falls back to pdfplumber if PyPDF2 gives poor results.
+
+    Args:
+        file_storage: A Flask FileStorage object (from request.files)
+
+    Returns:
+        str: Extracted text or an error message
     """
     try:
-        # Primary: PyPDF2 (fast, great for standard resumes)
-        reader = pdf.PdfReader(uploaded_file)
+        pdf_reader = PyPDF2.PdfReader(io.BytesIO(file_storage.read()))
         text = ""
-        for page in reader.pages:
-            extracted = page.extract_text()
-            if extracted:
-                text += extracted + "\n"
 
-        # If text is too short, use pdfplumber for complex layouts
-        if len(text.strip()) < 100:
-            uploaded_file.seek(0)
-            with pdfplumber.open(uploaded_file) as plumber_pdf:
-                text = ""
-                for page in plumber_pdf.pages:
-                    page_text = page.extract_text()
-                    if page_text:
-                        text += page_text + "\n"
+        for page in pdf_reader.pages:
+            page_text = page.extract_text()
+            if page_text:
+                text += page_text + "\n"
 
-        return text.strip() if text.strip() else "Could not extract text from resume."
+        text = text.strip()
+
+        if len(text) < 50:
+            return "Could not extract text from resume."
+
+        return text
 
     except Exception as e:
         return f"Error extracting text: {str(e)}"

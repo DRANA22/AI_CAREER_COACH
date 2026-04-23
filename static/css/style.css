@@ -42,6 +42,89 @@
   --transition-bounce: 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
+/* ── Tag / Pill Styles ────────────────────────────────────────── */
+.tag {
+  display: inline-block;
+  padding: 0.3rem 0.7rem;
+  margin: 0.25rem 0.3rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.tag.success {
+  background: rgba(0, 240, 120, 0.1);
+  color: #00f078;
+  border: 1px solid rgba(0, 240, 120, 0.25);
+}
+
+.tag.danger {
+  background: rgba(255, 0, 80, 0.1);
+  color: #ff5080;
+  border: 1px solid rgba(255, 0, 80, 0.25);
+}
+
+/* ── Section Score Bars ───────────────────────────────────────── */
+.factor-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.factor-label {
+  min-width: 120px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: capitalize;
+}
+
+.factor-track {
+  flex: 1;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+
+.factor-fill {
+  height: 100%;
+  border-radius: var(--radius-pill);
+  transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.factor-value {
+  min-width: 42px;
+  text-align: right;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* ── ATS Score Display ────────────────────────────────────────── */
+.score-number {
+  font-size: 4rem;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.score-bar-wrapper {
+  height: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+
+.score-bar-fill {
+  height: 100%;
+  background: var(--gradient-main);
+  border-radius: var(--radius-pill);
+  transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
 /* ── Global Reset ─────────────────────────────────────────────── */
 *, *::before, *::after {
   margin: 0;

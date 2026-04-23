@@ -1,1 +1,1 @@
-# Logic modules for AI Career Coach
+# AI Career Coach — Logic Package
